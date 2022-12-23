@@ -1,22 +1,28 @@
 const express = require("express");
-const { connect } = require('./db/connect');
-const routeUser = require("./route/user");
+const { connecter } = require("./db/connect");
+const userRoute = require("./route/user");
 const app = express();
 
+const hostname = "localhost";
+const port = 3000;
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended : true}));
 app.use(express.json());
 
-app.use("/api/v1", routeUser);
+app.use("/api/v1", userRoute);
 
-connect("mongodb://localhost:27017/", (err) => {
-    if(err){
-        console.log("Can not connect with database");
+connecter("mongodb://127.0.0.1:27017/", (error) =>{
+    if(error){
+        console.log("Can not connect to database!");
         process.exit(-1);
     }else{
         console.log("Connected sucessfully!");
-        app.listen(3000);
-        console.log("server is listening at port 3000");
-
+        app.listen(port, hostname, () => {
+            console.log(`Server running at http://${hostname}:${port}/`);
+          });
+        
     }
 });
+
+
+

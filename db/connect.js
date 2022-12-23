@@ -1,32 +1,34 @@
-const { MongoClient,Db } = require("mongodb");
+const { MongoClient, Db } = require("mongodb");
 
-let client = null;
+var client = null;
 
-function connect(url, callback){
-    if(client === null){
+function connecter(url, callback){
+    if(client == null){
         client = new MongoClient(url);
 
-        client.connect((err) => {
-            if(err){
+        client.connect((error) => {
+            if(error){
                 client = null;
-                callback(err);
-            } else{
-                callback();
+                callback(error);
+            }else{
+                callback()
             }
         });
+    }else{
+        callback();
     }
 }
 
-function db(){
-    const db = new Db(client, "dbok"); 
-    return db;
+function bd(){
+    return new Db(client, "dbOk");
 }
 
-function endConnexion(){
+function endconnexion(){
     if(client){
         client.close();
         client = null;
     }
 }
 
-module.exports = {connect, db, endConnexion};
+
+module.exports = {connecter, bd, endconnexion};
